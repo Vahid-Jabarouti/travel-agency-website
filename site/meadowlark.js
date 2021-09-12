@@ -1,7 +1,7 @@
 const express = require('express')
 const path = require('path')
 const expressHandlebars = require('express-handlebars')
-const fortune = require('./lib/fortune')
+const handlers = require('./lib/handler')
 const port = process.env.PORT || 3000;
 
 const app = express()
@@ -19,25 +19,15 @@ app.use(express.static(path.join(__dirname, '/public')))
 // being rendered res.render()
 app.set('views', path.join(__dirname, 'views'))
 
-app.get('/', (req, res) => res.render('home'))
+app.get('/', handlers.home)
 
-app.get('/about', (req, res) => {
-  const randomFortune = fortunes[Math.floor(Math.random()*fortunes.length)]
-  res.render('about', {fortune: fortune.getFortune()})
-})
+app.get('/about', handlers.about)
 
 //custom 404 page
-app.use((req, res) => {
-  res.status(404)
-  res.render('404')
-})
+app.use(handlers.notFound)
 
 //custom 500 page
-app.use((err, req, res, next) => {
-  console.error(err)
-  res.status(500)
-  res.render('500')
-})
+app.use(handlers.serverError)
 
 app.listen(port, () => console.log(`Server started on port ${port}` + 
   ' Press Ctrl-C to terminate...'))

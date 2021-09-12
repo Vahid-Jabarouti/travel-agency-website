@@ -10,4 +10,3 @@ exports.getFortune = () => {
   const idx = Math.floor(Math.random()*fortuneCookies.length)
   return fortuneCookies[idx]
 }
-
